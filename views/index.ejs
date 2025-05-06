@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Lyrics Finder</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <button onclick="toggleTheme()">🌙 Toggle Theme</button>
+  <h1>🎶 Lyrics Finder</h1>
+
+  <form method="POST" action="/search" autocomplete="off">
+    <input type="text" name="song" id="searchInput" placeholder="Enter song name" required />
+    <button type="submit">Search</button>
+    <div id="suggestions"></div>
+  </form>
+
+  <% if (error) { %>
+    <p class="error"><%= error %></p>
+  <% } %>
+
+  <% if (songs) { %>
+    <div class="grid">
+      <% songs.forEach(song => { %>
+        <div class="card">
+          <img src="<%= song.thumbnail %>" alt="Album Art" />
+          <h3><%= song.title %></h3>
+          <p><%= song.release_date %> • <%= song.duration %></p>
+          <button onclick="getLyrics('<%= song.title %>')">View Lyrics</button>
+          <a href="<%= song.trackUrl %>" target="_blank">Open in Spotify</a>
+        </div>
+      <% }) %>
+    </div>
+  <% } %>
+
+  <div id="lyricsBox"></div>
+
+  <script>
+    async function getLyrics(title) {
+      const res = await fetch(`/lyrics?title=${encodeURIComponent(title)}`);
+      const data = await res.json();
+      document.getElementById("lyricsBox").innerHTML = `
+        <h2>${data.fullTitle}</h2>
+        ${data.thumbnail ? `<img src="${data.thumbnail}" alt="cover" style="width:200px;border-radius:10px;">` : ""}
+        <pre>${data.lyrics}</pre>
+      `;
+      window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+    }
+
+    function toggleTheme() {
+      document.body.classList.toggle("light");
+      localStorage.setItem("theme", document.body.classList.contains("light") ? "light" : "dark");
+    }
+
+    if (localStorage.getItem("theme") === "light") {
+      document.body.classList.add("light");
+    }
+
+    const input = document.getElementById("searchInput");
+    const suggestionsBox = document.getElementById("suggestions");
+    let timeout;
+
+    input.addEventListener("input", () => {
+      clearTimeout(timeout);
+      const query = input.value.trim();
+      if (!query) return (suggestionsBox.innerHTML = "");
+
+      timeout = setTimeout(async () => {
+        const res = await fetch(`https://kaiz-apis.gleeze.com/api/spotify-search?q=${encodeURIComponent(query)}`);
+        const data = await res.json();
+        suggestionsBox.innerHTML = data
+          .slice(0, 5)
+          .map(song => `<div class="suggestion" onclick="selectSuggestion('${song.title}')">${song.title} - ${song.author}</div>`)
+          .join("");
+      }, 300);
+    });
+
+    function selectSuggestion(title) {
+      input.value = title;
+      suggestionsBox.innerHTML = "";
+    }
+  </script>
+</body>
+</html>

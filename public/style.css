@@ -1,0 +1,99 @@
+body {
+    font-family: sans-serif;
+    background: #111;
+    color: #fff;
+    text-align: center;
+    padding: 20px;
+  }
+  h1 {
+    font-size: 2rem;
+  }
+  form {
+    margin: 20px auto;
+    position: relative;
+  }
+  input {
+    padding: 10px;
+    width: 250px;
+    border-radius: 5px;
+    border: none;
+  }
+  button {
+    padding: 10px;
+    border: none;
+    background: #f90;
+    color: #000;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: 5px;
+  }
+  .grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+  }
+
+  .card {
+    background: #222;
+    padding: 15px;
+    border-radius: 10px;
+    width: 220px;
+  }
+  .card img {
+    width: 100%;
+    border-radius: 5px;
+  }
+
+  .card a {
+    display: inline-block;
+    margin-top: 5px;
+    color: #f90;
+    text-decoration: none;
+  }
+  .card a:hover {
+    text-decoration: underline;
+  }
+  
+  pre {
+    text-align: left;
+    white-space: pre-wrap;
+    background: #222;
+    padding: 15px;
+    border-radius: 10px;
+    margin-top: 20px;
+  }
+  #suggestions {
+    background: #333;
+    position: absolute;
+    max-width: 300px;
+    text-align: left;
+    z-index: 10;
+    border-radius: 5px;
+    margin-top: 2px;
+    left: 0;
+    right: 0;
+  }
+  .suggestion {
+    padding: 10px;
+    cursor: pointer;
+  }
+  .suggestion:hover {
+    background: #444;
+  }
+  .error {
+    color: #f55;
+  }
+  
+  /* Light mode */
+  body.light {
+    background: #f5f5f5;
+    color: #111;
+  }
+  body.light .card {
+    background: #fff;
+  }
+  body.light #suggestions {
+    background: #eee;
+  }
+  
