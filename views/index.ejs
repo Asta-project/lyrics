@@ -71,7 +71,7 @@
         const data = await res.json();
         suggestionsBox.innerHTML = data
           .slice(0, 5)
-          .map(song => `<div class="suggestion" onclick="selectSuggestion('${song.title}')">${song.title} - ${song.author}</div>`)
+          .map(song => `<div class="suggestion" onclick="selectSuggestion('${song.title}')">${song.title}</div>`)
           .join("");
       }, 300);
     });
